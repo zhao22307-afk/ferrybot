@@ -1,0 +1,20 @@
+# 统一换行符：源码/文档用 LF，Windows 脚本用 CRLF
+* text=auto eol=lf
+
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+gradlew text eol=lf
+
+# Git 不当作文本处理、不做 diff/换行的二进制
+*.jar     binary
+*.apk     binary
+*.aab     binary
+*.xz      binary
+*.zip     binary
+*.so      binary
+*.so.*    binary
+*.zz      binary
+*.wasm    binary
+*.onnx    binary
+*.dex     binary

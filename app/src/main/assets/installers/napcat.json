@@ -1,0 +1,55 @@
+{
+  "id": "napcat",
+  "name": "NapCat 4.18.41（LinuxQQ arm64）",
+  "kind": "proot",
+  "sizeHint": 470,
+  "needDiskMb": 2400,
+  "downloads": [
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb", "file": "proot.deb", "size": 103072, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb", "file": "libtalloc.deb", "size": 34036, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb", "file": "shmem.deb", "size": 7216, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz", "file": "rootfs.tar.gz", "size": 29936675, "mirrors": [
+      "https://mirrors.ustc.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz",
+      "https://mirrors.aliyun.com/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz",
+      "https://mirror.nju.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz"
+    ]},
+    {"url": "https://qqdl.gtimg.cn/qqfile/QQNT/9.9.36/beta/9ee04bef/linuxqq_3.2.34-53644_arm64.deb", "file": "linuxqq.deb", "size": 207538924, "mirrors": [
+      "https://dldir1.qq.com/qqfile/QQNT/9.9.36/beta/9ee04bef/linuxqq_3.2.34-53644_arm64.deb",
+      "https://dldir1v6.qq.com/qqfile/QQNT/9.9.36/beta/9ee04bef/linuxqq_3.2.34-53644_arm64.deb"
+    ]},
+    {"url": "https://ghfast.top/https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip", "file": "NapCat.Shell.zip", "size": 35894640, "mirrors": [
+      "https://gh-proxy.com/https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip",
+      "https://ghproxy.net/https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip",
+      "https://github.moeyy.xyz/https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip",
+      "https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip"
+    ]}
+  ],
+  "steps": [
+    {"type": "deb", "file": "proot.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {
+      "usr/bin/proot": "proot",
+      "usr/libexec/proot/*": "libexec/proot/"
+    }},
+    {"type": "deb", "file": "libtalloc.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {"usr/lib/*libtalloc*": "lib/"}},
+    {"type": "deb", "file": "shmem.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {"usr/lib/*android-shmem*": "lib/"}},
+    {"type": "tar", "file": "rootfs.tar.gz", "dest": "rootfs", "ifMissing": "/etc/os-release"},
+    {"type": "chmod", "path": "native/proot", "mode": "755"},
+    {"type": "chmod", "path": "native/libexec/proot/loader", "mode": "755"},
+    {"type": "unzip", "file": "NapCat.Shell.zip", "dest": "run/qqshell"},
+    {"type": "script", "file": "install-napcat.sh", "timeoutMs": 1800000}
+  ],
+  "run": {
+    "cmd": ["/usr/bin/env", "NAPCAT_FORCE_NODE_PROCESS=1", "xvfb-run", "-a", "./qq", "--no-sandbox"],
+    "workdir": "/root/Napcat/opt/QQ",
+    "port": 3001,
+    "webui": 6099
+  }
+}

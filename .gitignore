@@ -1,0 +1,35 @@
+# ---- 本地配置（运行时生成，可能含你的凭证，绝对不能提交）----
+.env
+.env.*
+*.env
+*.keystore
+*.jks
+signing.properties
+local.properties
+
+# ---- 构建产物 ----
+build/
+.gradle/
+.kotlin/
+.gradle-home/
+.cxx/
+out/
+dist/
+.tmp/
+captures/
+*.apk
+*.aab
+*.hprof
+
+# ---- 临时 / 备份文件 ----
+*.log
+*.bak
+*.swp
+*.tmp
+
+# ---- IDE / 系统 ----
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

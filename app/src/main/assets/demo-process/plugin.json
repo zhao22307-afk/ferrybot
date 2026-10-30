@@ -1,0 +1,8 @@
+{
+  "name": "示例进程技能",
+  "description": "发「进程测试」时在 Linux 环境里跑一段 shell 再回话",
+  "priority": 5,
+  "match": ["进程测试", "processtest"],
+  "cmd": ["/bin/sh", "/skills/demo-process/main.sh"],
+  "timeoutMs": 15000
+}

@@ -1,0 +1,57 @@
+{
+  "id": "piper",
+  "name": "本地语音 Piper（中文女声 huayan）",
+  "kind": "proot",
+  "sizeHint": 120,
+  "needDiskMb": 900,
+  "downloads": [
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb", "file": "proot.deb", "size": 103072, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/p/proot/proot_5.1.107.101_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb", "file": "libtalloc.deb", "size": 34036, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/libt/libtalloc/libtalloc_2.5.0_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb", "file": "shmem.deb", "size": 7216, "mirrors": [
+      "https://mirrors.ustc.edu.cn/termux/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb",
+      "https://packages.termux.dev/apt/termux-main/pool/main/liba/libandroid-shmem/libandroid-shmem_0.7_aarch64.deb"
+    ]},
+    {"url": "https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz", "file": "rootfs.tar.gz", "size": 29936675, "mirrors": [
+      "https://mirrors.ustc.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz",
+      "https://mirrors.aliyun.com/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz",
+      "https://mirror.nju.edu.cn/ubuntu-cdimage/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.5-base-arm64.tar.gz"
+    ]},
+    {"url": "https://ghfast.top/https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_aarch64.tar.gz", "file": "piper.tar.gz", "size": 26004717, "mirrors": [
+      "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_aarch64.tar.gz",
+      "https://gh-proxy.com/https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_aarch64.tar.gz"
+    ]},
+    {"url": "https://hf-mirror.com/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx", "file": "zh_CN-huayan-medium.onnx", "size": 63201294, "mirrors": [
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx"
+    ]},
+    {"url": "https://hf-mirror.com/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json", "file": "zh_CN-huayan-medium.onnx.json", "size": 4822, "mirrors": [
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/zh/zh_CN/huayan/medium/zh_CN-huayan-medium.onnx.json"
+    ]}
+  ],
+  "steps": [
+    {"type": "deb", "file": "proot.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {
+      "usr/bin/proot": "proot",
+      "usr/libexec/proot/*": "libexec/proot/"
+    }},
+    {"type": "deb", "file": "libtalloc.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {"usr/lib/*libtalloc*": "lib/"}},
+    {"type": "deb", "file": "shmem.deb", "dest": "native", "ifMissing": "/etc/os-release", "pick": {"usr/lib/*android-shmem*": "lib/"}},
+    {"type": "tar", "file": "rootfs.tar.gz", "dest": "rootfs", "ifMissing": "/etc/os-release"},
+    {"type": "tar", "file": "piper.tar.gz", "dest": "rootfs/root"},
+    {"type": "move", "file": "zh_CN-huayan-medium.onnx", "dest": "rootfs/root/piper/models/zh_CN-huayan-medium.onnx"},
+    {"type": "move", "file": "zh_CN-huayan-medium.onnx.json", "dest": "rootfs/root/piper/models/zh_CN-huayan-medium.onnx.json"},
+    {"type": "chmod", "path": "rootfs/root/piper/piper", "mode": "755"},
+    {"type": "chmod", "path": "native/proot", "mode": "755"},
+    {"type": "chmod", "path": "native/libexec/proot/loader", "mode": "755"}
+  ],
+  "run": {
+    "cmd": ["/usr/bin/env", "ESPEAK_DATA_PATH=/root/piper/espeak-ng-data", "/root/piper/piper", "--help"],
+    "workdir": "/root/piper",
+    "port": 0,
+    "webui": 0
+  }
+}

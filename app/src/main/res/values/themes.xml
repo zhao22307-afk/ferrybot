@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.Bot" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFF6F7F9</item>
+        <item name="android:statusBarColor">#FFF6F7F9</item>
+        <item name="android:navigationBarColor">#FFFFFFFF</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

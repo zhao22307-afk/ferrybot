@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 协议端运行时目录（二维码、日志等） -->
+    <files-path name="linux" path="linux/" />
+    <files-path name="bot" path="bot/" />
+    <cache-path name="cache" path="." />
+</paths>

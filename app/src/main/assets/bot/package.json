@@ -1,0 +1,14 @@
+{
+  "name": "ferrybot-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ferrybot 的机器人运行时代码（Node.js，任意 OpenAI 兼容接口）",
+  "type": "module",
+  "main": "bot.mjs",
+  "scripts": {
+    "start": "node bot.mjs"
+  },
+  "dependencies": {
+    "silk-wasm": "^3.7.1"
+  }
+}

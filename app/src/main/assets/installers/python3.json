@@ -1,0 +1,16 @@
+{
+  "id": "python3",
+  "name": "Python 3 支持（约 60 MB，给 Python 技能用）",
+  "kind": "proot",
+  "sizeHint": 80,
+  "needDiskMb": 500,
+  "downloads": [],
+  "steps": [
+    {
+      "type": "script",
+      "file": "install-python3.sh",
+      "timeoutMs": 1800000,
+      "ifMissing": "usr/bin/python3"
+    }
+  ]
+}

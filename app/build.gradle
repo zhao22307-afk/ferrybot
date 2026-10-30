@@ -1,0 +1,77 @@
+plugins {
+    id 'com.android.application'
+    // AGP 9.0+ 内置 Kotlin 支持，不能再应用 org.jetbrains.kotlin.android，
+    // 否则会抛 InvalidPluginException（The 'org.jetbrains.kotlin.android' plugin is no longer required...）
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+android {
+    namespace 'com.qqbot.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.qqbot.app"
+        minSdk 26
+        // 特意用 28：Android 10+ 限制了「从应用私有目录执行二进制」，
+        // 只有 targetSdk <= 28 才能 exec 解压出来的 node（Termux 同理）
+        targetSdk 28
+        versionCode 53
+        versionName "1.0.52"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    androidResources {
+        // node.xz 本身已是高压缩数据，再 deflate 只会让解压更慢、包更大
+        noCompress += "xz"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    lint {
+        // targetSdk 28 是刻意为的（Android 10+ 不允许从应用私有目录 exec 解压出来的 node），
+        // 所以关掉 Play 商店的 targetSdk 时效检查，否则 assembleRelease 会在 lintVital 阶段失败
+        disable 'ExpiredTargetSdkVersion'
+    }
+}
+
+// Kotlin 2.x 写法（kotlinOptions 在 AGP 9 已废弃）
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    implementation platform('androidx.compose:compose-bom:2025.09.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0'
+    // AppViewModel 直接用了 Dispatchers / delay / launch / withContext，
+    // 显式声明避免依赖传递版本不确定
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+    // 「手机本地跑协议端」：解 .deb(ar+xz)、tar.gz；生成登录二维码
+    implementation 'org.apache.commons:commons-compress:1.27.1'
+    // commons-compress 的 XZCompressorInputStream 依赖它；缺了 R8 会报 Missing class，
+    // 真机上解 .deb 里的 data.tar.xz 也会 NoClassDefFoundError
+    implementation 'org.tukaani:xz:1.10'
+    implementation 'com.google.zxing:core:3.5.3'
+}
