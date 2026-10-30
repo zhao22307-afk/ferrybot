@@ -149,7 +149,7 @@ App 对真实 QQ 只做 **OneBot v11 客户端**，不内置 QQ 协议实现。�
 
 ## 构建
 
-需要 **JDK 17** + **Android SDK Platform 35**。
+需要 **JDK 21** + **Android SDK Platform 35**（编译目标仍是 Java 17 字节码，原因见 [构建说明.md](构建说明.md#一环境要求)）。
 
 ```bash
 # macOS / Linux

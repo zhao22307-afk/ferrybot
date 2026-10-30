@@ -78,7 +78,12 @@ App 本身免费。费用只来自你自己配的模型/语音/搜索服务：�
 ## 构建相关
 
 **Q：构建报 `Unsupported class file major version 65`？**
-Gradle 用的 JDK 太新，改成 **JDK 17**（Android Studio：Settings → Build → Gradle → Gradle JDK）。
+有环节把编译目标设成了 21。确认 `app/build.gradle` 里 `sourceCompatibility` / `targetCompatibility`
+与 `jvmTarget` 都是 17（仓库现状如此，别改）。
+
+**Q：构建卡在下载 JDK / `Provisioning toolchain`？**
+`gradle/gradle-daemon-jvm.properties` 把 Gradle daemon 固定到 JDK 21，本机没有就会去 foojay 下载。
+离线环境自己装 JDK 21，或把该文件里的 `toolchainVersion=21` 改成 `17`。
 
 **Q：报 `InvalidPluginException ... kotlin.android`？**
 AGP 9 已内置 Kotlin 编译，别再声明 `org.jetbrains.kotlin.android` 插件。

@@ -4,7 +4,7 @@
 
 ## 环境
 
-- JDK **17**、Android SDK **Platform 35**（Build-Tools 35）
+- JDK **21**（编译目标是 Java 17 字节码）、Android SDK **Platform 35**（Build-Tools 35）
 - Android Studio 任意较新版本（需支持 AGP 9），或直接用命令行
 - 想改机器人 JS 的话，任意 **Node 22+**（内置运行时是 Node 24）
 - 测试机：**arm64**、Android 8.0+（模拟器不行：内置运行时只有 arm64 版本）
