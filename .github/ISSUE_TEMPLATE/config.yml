@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 常见问题（安装 / 费用 / 封号 / 掉线 / 构建）
+    url: https://github.com/zhao22307-afk/ferrybot/blob/main/docs/FAQ.md
+    about: 先看这里，很多问题已有答案
+  - name: 构建说明
+    url: https://github.com/zhao22307-afk/ferrybot/blob/main/%E6%9E%84%E5%BB%BA%E8%AF%B4%E6%98%8E.md
+    about: 环境要求、常见构建报错对照
+  - name: 安全漏洞
+    url: https://github.com/zhao22307-afk/ferrybot/blob/main/SECURITY.md
+    about: 请不要用公开 Issue 报告安全问题

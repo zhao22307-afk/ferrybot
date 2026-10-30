@@ -53,6 +53,12 @@ node --check app/src/main/assets/bot/lib/*.mjs   # 或逐个文件检查
 - 说明**为什么**改，而不只是改了什么；涉及行为变化请写清影响
 - 不要在这次 PR 里带入个人配置、调试日志或与项目无关的文件
 
+## Issue
+
+- 提 Bug / 建议请用 [Issue 模板](.github/ISSUE_TEMPLATE)，按模板填版本、机型、接入方式、脱敏日志
+- 安全漏洞不要开公开 Issue，按 [SECURITY.md](SECURITY.md) 私密报告
+- 问「怎么用」类问题先看 [docs/FAQ.md](docs/FAQ.md) 和 [构建说明.md](构建说明.md)
+
 ## 不能接受的内容
 
 - 用于骚扰、诈骗、冒充他人、批量营销、传播违法信息的功能

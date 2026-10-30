@@ -1,0 +1,85 @@
+name: Bug 反馈
+description: 安装、运行、构建或功能异常
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提之前先看 [常见问题](https://github.com/zhao22307-afk/ferrybot/blob/main/docs/FAQ.md) 和 [构建说明](https://github.com/zhao22307-afk/ferrybot/blob/main/%E6%9E%84%E5%BB%BA%E8%AF%B4%E6%98%8E.md)，很多问题那里已经有答案。
+        **贴日志前请删掉 API Key、AppSecret、QQ 号、服务器地址等私人信息。**
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 发生了什么？和预期有什么不同？
+      placeholder: 例如：点「启动」后状态一直显示「环境未就绪」，日志里报 ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 越具体越好
+      placeholder: |
+        1. 在「接入」里选「真实 QQ」
+        2. 安装 NapCat 并扫码登录
+        3. 发送「你好」
+        4. 机器人没有回复
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App 版本
+      description: 在「更多 → 关于」里能看到，或看 APK 文件名
+      placeholder: "1.0.52"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: channel
+    attributes:
+      label: 接入方式
+      options:
+        - QQ 官方机器人（AppID + Secret）
+        - 真实 QQ（OneBot v11 + NapCat）
+        - 两种都试过
+        - 与接入无关（界面 / 构建 / 安装）
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: 机型与系统
+      description: 必须是 arm64 真机
+      placeholder: "Pixel 7 / Android 14 / arm64"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志
+      description: 「更多 → 运行日志」里的内容，记得先脱敏
+      render: text
+      placeholder: 粘贴脱敏后的日志
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 已经读过 docs/FAQ.md 和 构建说明.md
+          required: true
+        - label: 搜索过现有 Issue，没有重复
+          required: true
+        - label: 日志里已经删掉 Key、Secret、QQ 号、私人地址
+          required: true
+        - label: 用的是 arm64 真机（模拟器不支持）
+          required: true
