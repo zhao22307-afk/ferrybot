@@ -18,6 +18,7 @@ import com.qqbot.app.LocalTts
 import com.qqbot.app.ModelCatalog
 import com.qqbot.app.ProtoManager
 import com.qqbot.app.Skills
+import com.qqbot.app.StyleCorpus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,6 +62,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     var emojis by mutableStateOf(listOf<String>()); private set
     var images by mutableStateOf(listOf<String>()); private set
     var skills by mutableStateOf<List<Skills.Skill>>(emptyList()); private set
+    /** 说话方式语料（bot/data/style.json）的摘要；null = 没导入 */
+    var styleInfo by mutableStateOf(StyleCorpus.read(env.botDir)); private set
     /** 素材添加/导入的最近一次结果（显示在素材页底部，方便排查「添加了没反应」） */
     var mediaDiag by mutableStateOf(""); private set
 
@@ -163,6 +166,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         refreshEmojis()
         refreshImages()
         refreshSkills()
+        refreshStyle()
         refreshContacts()
         refreshVoices()
         refreshLinks()
@@ -789,6 +793,63 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
                 }
             )
         }
+    }
+
+    // ---------- 说话方式语料（聊天记录 / 句子） ----------
+
+    /**
+     * 导入聊天记录或语料：解析成「一问一答」或「句子」，写 bot/data/style.json。
+     * 机器人每条消息都会重新看一眼这个文件（按修改时间缓存），所以下一条消息就生效，
+     * 不用重启；清空同理。
+     */
+    fun importStyle(uri: Uri) {
+        val ctx = getApplication<Application>()
+        viewModelScope.launch {
+            val res = withContext(Dispatchers.IO) {
+                runCatching {
+                    val name = queryDisplayName(ctx, uri) ?: "语料文件"
+                    val bytes = ctx.contentResolver.openInputStream(uri)?.use { it.readBytes() }
+                        ?: throw IllegalStateException("读不到这个文件")
+                    if (bytes.size > 3 * 1024 * 1024) {
+                        throw IllegalStateException("文件超过 3MB，先剪一段再导入")
+                    }
+                    StyleCorpus.parseAndSave(env.botDir, name, decodeText(bytes))
+                }
+            }
+            res.onSuccess { info ->
+                styleInfo = info
+                showToast(
+                    "已导入 " + info.count + " 条" + (if (info.isDialog) "对话" else "句子") + "，下一条消息生效"
+                )
+            }.onFailure { e ->
+                showToast("导入失败：" + (e.message ?: "格式没认出来"))
+            }
+        }
+    }
+
+    fun refreshStyle() {
+        styleInfo = StyleCorpus.read(env.botDir)
+    }
+
+    fun clearStyle() {
+        viewModelScope.launch {
+            val ok = withContext(Dispatchers.IO) { runCatching { StyleCorpus.clear(env.botDir) }.getOrDefault(false) }
+            refreshStyle()
+            showToast(if (ok) "已清空语料" else "清空失败，文件可能被占用")
+        }
+    }
+
+    /** 解码文本：UTF-16 BOM 按 UTF-16；UTF-8 解出大量乱码时按 GB18030 再试（老版 QQ 导出的 txt 常见） */
+    private fun decodeText(bytes: ByteArray): String {
+        if (bytes.size >= 2 && bytes[0] == 0xFF.toByte() && bytes[1] == 0xFE.toByte()) {
+            return runCatching { String(bytes, Charsets.UTF_16LE) }.getOrDefault("")
+        }
+        val utf8 = String(bytes, Charsets.UTF_8)
+        val bad = utf8.count { it == '\uFFFD' }
+        if (bad > 0 && bad * 100 >= utf8.length) {
+            return runCatching { String(bytes, java.nio.charset.Charset.forName("GB18030")) }.getOrDefault(utf8)
+        }
+        return utf8
     }
 
     fun setSkillEnabled(key: String, enabled: Boolean) {

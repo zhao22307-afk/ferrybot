@@ -265,7 +265,7 @@ class EnvManager(context: Context) {
         const val DIR_LOGS = "logs"
 
         /** 代码版本戳：改了 assets/bot 里的 JS 就把它 +1，装过的手机才会重新铺代码 */
-        const val BOT_CODE_VERSION = "7"
+        const val BOT_CODE_VERSION = "8"
         private const val CODE_STAMP = ".code-version"
 
         /** 运行时版本戳：assets/runtime 里的二进制换了就 +1，老机器才会重铺 */

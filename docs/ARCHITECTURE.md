@@ -49,6 +49,7 @@
 | `LocalTts.kt` | 本地 Piper 的 HTTP 桥，监听 `127.0.0.1:17891`，给 Node 侧调用 |
 | `VoiceEnroll.kt` | 云端声音复刻：上传录音、创建音色 |
 | `Skills.kt` | 技能目录：扫描 JS 技能与进程技能、启用/停用/删除 |
+| `StyleCorpus.kt` | 说话方式语料：解析导入的 `.txt` / `.json` / `.jsonl`，写成 `data/style.json`（对话片段或句子），供 JS 侧拼 system prompt |
 | `ConfigStore.kt` | 配置读写：`.env` 的解析与生成、人设预设、默认值 |
 | `ModelCatalog.kt` | 拉取 OpenAI 兼容服务的模型列表；校验 QQ 官方机器人 AppID/AppSecret |
 | `LogText.kt` | 日志清洗：去 ANSI、去噪声行 |
@@ -80,7 +81,8 @@
 | `lib/qq.mjs` | QQ 官方机器人：AccessToken、WebSocket 网关、发消息、富媒体上传 |
 | `lib/onebot.mjs` | OneBot v11 客户端：连 `ws://…`、收发事件、调 API |
 | `lib/llm.mjs` | 模型调用（OpenAI 兼容）、提示词组装、工具/搜索触发 |
-| `lib/memory.mjs` | 短记忆（最近 N 条）+ 长期画像（facts） |
+| `lib/memory.mjs` | 短记忆（最近 N 条）+ 长期画像（facts）；`buildSystem()` 拼装 system prompt（含语料块） |
+| `lib/style.mjs` | 读 `data/style.json`，把语料压成约 1200 字的「说话方式参考」片段（按 mtime 缓存） |
 | `lib/contacts.mjs` | 最近聊过的人（主动消息目标） |
 | `lib/emoji.mjs` | 表情包挑选与概率附带 |
 | `lib/link.mjs` | 提取链接、抓正文、收藏链接库 |
@@ -113,6 +115,8 @@ ConfigStore ──写──▶ files/bot/.env ──读取──▶ Node 进程�
 - 记忆、画像、联系人、素材标签、统计由 JS 侧写到 `files/bot/data/`；表情包/图片在
   `files/bot/emoji/`、`files/bot/image/`；技能在 `files/bot/skills/`。
 - 人设提示词落在 `files/bot/prompt.txt`（首次由 `ConfigStore.DEFAULT_PROMPT` 生成）。
+- 说话方式语料落在 `files/bot/data/style.json`（`StyleCorpus` 写、`lib/style.mjs` 读）；
+  它是 `data/` 下的普通文件，所以重铺机器人代码时不会被覆盖。
 
 ## 五、内置 Node 运行时怎么铺到磁盘
 

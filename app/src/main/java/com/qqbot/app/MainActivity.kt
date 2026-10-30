@@ -103,6 +103,9 @@ class MainActivity : ComponentActivity() {
                 val pickVoicePackLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                     if (uri != null) vm.importVoicePack(uri)
                 }
+                val pickStyleLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                    if (uri != null) vm.importStyle(uri)
+                }
                 // 系统字体放大到 1.3+ 时整页会挤坏；这里跟随系统但夹在 0.85~1.1
                 val baseDensity = LocalDensity.current
                 CompositionLocalProvider(
@@ -130,6 +133,14 @@ class MainActivity : ComponentActivity() {
                                 arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream")
                             )
                         },
+                        onPickStyle = {
+                            pickStyleLauncher.launch(
+                                arrayOf(
+                                    "text/plain", "application/json", "application/x-ndjson",
+                                    "text/markdown", "application/octet-stream", "*/*"
+                                )
+                            )
+                        },
                     )
                 }
             }
@@ -144,6 +155,7 @@ private fun AppRoot(
     onPickImage: () -> Unit,
     onPickSkill: () -> Unit,
     onPickVoicePack: () -> Unit,
+    onPickStyle: () -> Unit,
 ) {
     var tab by remember { mutableStateOf(Tab.Home) }
     var page by remember { mutableStateOf<Page?>(null) }
@@ -168,7 +180,7 @@ private fun AppRoot(
                             when (p) {
                                 Page.Commands -> CommandsScreen()
                                 Page.Logs -> LogScreen(vm) { page = null }
-                                Page.Persona -> PersonaScreen(vm) { page = null }
+                                Page.Persona -> PersonaScreen(vm, onPickStyle = onPickStyle) { page = null }
                                 Page.About -> AboutScreen()
                                 Page.Material -> MaterialPage(vm, onPickEmoji, onPickImage, onPickSkill)
                                 Page.Advanced -> AdvancedPage(vm)

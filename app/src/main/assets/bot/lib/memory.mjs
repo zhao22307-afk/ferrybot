@@ -11,6 +11,7 @@ import { uploadMedia, sendMedia, proactiveText } from './transport.mjs';
 import { textToSpeech } from './llm.mjs';
 import { maybeSendLink } from './link.mjs';
 import { saveContactsNow } from './contacts.mjs';
+import { buildStyleBlock } from './style.mjs';
 
 const file = (n) => path.join(DATA_DIR, n);
 
@@ -344,6 +345,9 @@ export function buildSystem(convKey, history) {
 
   const f = facts.get(convKey);
   if (f?.text) sys += `\n\n关于对方，你记得这些（自然用上，别照念）：\n${f.text}`;
+
+  // 用户导入的说话方式语料（data/style.json）：只学语气，不照抄
+  sys += buildStyleBlock();
 
   // 关系深度：按聊过多少条决定熟络程度
   const userCount = history.filter((m) => m.role === 'user').length;
