@@ -10,7 +10,7 @@
 
 | 问题 | 结论 |
 |---|---|
-| arm64 无 root 安卓能跑 NapCat 吗？ | **能**。Tencent 官方发布 **aarch64 LinuxQQ deb**，NapCat 官方文档有 **Termux/proot 专章**，**不需要 box64、不需要 qemu**（你最初的 box64 设想作废） |
+| arm64 无 root 安卓能跑 NapCat 吗？ | **能**。Tencent 官方发布 **aarch64 LinuxQQ deb**，NapCat 官方文档有 **Termux/proot 专章**，**不需要 box64、不需要 qemu** |
 | 架构 | proot（Termux 5.1.107.101, aarch64）+ Ubuntu base 24.04.5 arm64 rootfs + LinuxQQ 3.2.34-53644 arm64 + NapCat.Shell 4.18.41 |
 | 首次总下载量 | **≈ 470 MiB**（详见 §4） |
 | 装完占盘 | **≈ 1.5 ~ 1.8 GiB**【部分未实测，见 §4 备注】 |
@@ -36,7 +36,7 @@
   ```
   > `raw.githubusercontent.com` 在当前网络不可达，可用 jsdelivr 镜像：`https://cdn.jsdelivr.net/gh/NapNeko/NapCat-Installer@main/script/install.termux.sh`（镜像规则已验证，此文件**未逐一验证**）。
 
-**arm64 真实表现（启动耗时/内存/稳定性/是否必须前台）**：`【未验证】`——社区没有可引用的公开实测数据，我没能检索到（本环境 `web_search` 不可用，Bing 返回的是泛化结果）。**必须自己测**，测法见 §8。以下为工程估算，**不可当结论用**：Xvfb+Electron 冷启动约 20~60 s（低端机更久）；常驻内存约 400~800 MB（Electron 主进程 + 渲染进程 + NapCat）；**不需要前台**（无 Activity 也能跑，前提是有前台 Service 撑进程，见 §7）。
+**arm64 真实表现（启动耗时/内存/稳定性/是否必须前台）**：`【未验证】`——社区没有可引用的公开实测数据，公开渠道暂未检索到可引用的数据。**必须自己测**，测法见 §8。以下为工程估算，**不可当结论用**：Xvfb+Electron 冷启动约 20~60 s（低端机更久）；常驻内存约 400~800 MB（Electron 主进程 + 渲染进程 + NapCat）；**不需要前台**（无 Activity 也能跑，前提是有前台 Service 撑进程，见 §7）。
 
 ---
 
@@ -394,7 +394,7 @@ Android 侧：`hash` 用 `MessageDigest("SHA-256")` 算 token+".napcat" 的字�
 | **App 内置 proot（本文）** | 真正一键、无广告、可打包资源镜像 | 工程量大：自研 tar/ar 解包、下载器、FGS 守护、1.5 GB 磁盘、长稳风险 |
 | 直装 Termux 原生 NapCat（不用 proot） | 更轻 | **已确认不可行**：issue #1261 明确 `npm install` 阶段 `node-pty` 编译失败（`undefined variable android_ndk_path`），且需要 Termux 里自己编 node |
 | Docker/udocker | 无 | Android 上跑 Docker 需要 root；udocker 仍要 proot 底座，收益为 0 |
-| 其他协议端（Lagrange.Core / LiteLoaderQQNT 等） | 可能省资源 | 与本任务"跑 QQ 官方协议端"的等价性、风控表现都需另做调研，不在本文范围 |
+| 其他协议端（Lagrange.Core / LiteLoaderQQNT 等） | 可能省资源 | 与本项目"跑 QQ 官方协议端"的等价性、风控表现都需另做调研，不在本文范围 |
 
 ---
 

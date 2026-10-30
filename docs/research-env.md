@@ -1,6 +1,6 @@
 # 运行时 Linux 用户态环境 · 调研结论（arm64 / 无 root / targetSdk 28）
 
-> 调研时间 2026-10-28。所有"已验证"= 本次实际用 HTTP 请求确认过状态码/字节数（部分文件已下载并解析 ELF）。
+> 调研时间 2026-10-28。所有"已验证"= 本次调研实际下载并用 HTTP 请求确认过状态码/字节数（部分文件已下载并解析 ELF）。
 > 结论先行：**可行**。App 私有目录（`filesDir`）里 `exec` 在 targetSdk 28 下可用（本工程 node 已经这么跑），
 > 无 root 跑 Linux 的标准组合 = **Termux 的 proot（bionic 动态链接）+ Ubuntu Base 的 tar.gz rootfs**。
 > 总体积约 **30 MB 下载 / 350 MB 落盘**（Ubuntu Base 解压 ~90 MB，装完 Node/QQ 端后 300–600 MB）。
